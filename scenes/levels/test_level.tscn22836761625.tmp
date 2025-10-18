@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm4gah0vibsdq"]
+
+[ext_resource type="PackedScene" uid="uid://dkl4s4ceqy7nb" path="res://scenes/levels/base_level.tscn" id="1_yautc"]
+[ext_resource type="PackedScene" uid="uid://dqpkvy0maln4m" path="res://scenes/prefabs/ControlledEntity.tscn" id="2_fr1um"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_v45ci"]
+
+[node name="BaseLevel" instance=ExtResource("1_yautc")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="0"]
+position = Vector2(88, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="0"]
+shape = SubResource("WorldBoundaryShape2D_v45ci")
+
+[node name="ControlledEntity" parent="." index="1" instance=ExtResource("2_fr1um")]
+position = Vector2(86, -41)
+player_override = true
+move_accel = null
+max_speed = null
+gravity = null
+friction = null
+terminal_velocity = 1200.0
+sharp_turn_multiplier = null
+air_move_multiplier = null
+jump_speed = 800.0
+
+[node name="Camera2D" type="Camera2D" parent="." index="2"]
