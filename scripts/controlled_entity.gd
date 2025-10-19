@@ -7,7 +7,7 @@ extends GameStateBoundEntity
 
 @export_group("Movement")
 @export var move_accel: float = 1400
-@export var max_speed: float = 300
+@export var max_speed: float = 200
 @export var sharp_turn_multiplier: float = 0.2
 @export var air_move_multiplier: float = 0.5
 @export var jump_speed: float = 600
@@ -101,13 +101,11 @@ func try_jump():
 
 
 func fire_weapon(delta: float):
-	return
-	weapon.fire()
+	weapon.fire(delta)
 
 
 func release_weapon(delta: float):
-	return
-	weapon.release()
+	weapon.release(delta)
 
 
 func enable_player_override():

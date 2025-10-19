@@ -6,7 +6,7 @@ extends GameStateBoundEntity
 @export var active: bool:
 	set(is_enabled):
 		active = is_enabled
-		#visible = is_enabled
+		visible = is_enabled
 
 @export var selected_body: ControlledEntity = null
 

@@ -3,5 +3,6 @@
 [ext_resource type="Shader" uid="uid://boo4b8v11ydfd" path="res://scripts/shader/laser_sight.gdshader" id="1_6i2dn"]
 
 [resource]
+resource_local_to_scene = true
 shader = ExtResource("1_6i2dn")
 shader_parameter/laser_color = Color(1, 0, 0, 1)

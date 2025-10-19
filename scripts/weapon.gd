@@ -1,10 +1,17 @@
 class_name Weapon
 extends Node2D
 
+@export var cd: float = 1.0
+@export var ready_threshold: float = 1.0
+@export var laser_sights: LaserSightCross
+@export var cdTimer: Timer
+@export var animation_player: AnimationPlayer
 
 var target: Node2D
 var target_rotation: float
 var rotation_weight: float
+
+var firing_progress: float = 0.0
 
 
 func _ready():
@@ -37,9 +44,20 @@ func lock_off_target():
 	target = null
 
 
-func fire():
-	pass
+func fire(delta: float):
+	if cdTimer.is_stopped():
+		firing_progress = clampf(firing_progress + delta, 0, ready_threshold)
+		if firing_progress >= ready_threshold:
+			laser_sights.start_warbling()
+		laser_sights.focus(firing_progress / ready_threshold)
 
 
-func release():
-	pass
+func release(delta: float):
+	if firing_progress >= ready_threshold:
+		cdTimer.start(cd)
+		animation_player.play("recover", -1, 1 / cd)
+		firing_progress = 0
+	elif cdTimer.is_stopped():
+		firing_progress = 0
+		laser_sights.focus(firing_progress / ready_threshold)
+	laser_sights.fire_reset()
