@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqpkvy0maln4m"]
+
+[ext_resource type="Script" uid="uid://4fy4lf3u0wfb" path="res://scripts/controlled_entity.gd" id="1_j83e1"]
+[ext_resource type="Texture2D" uid="uid://d2vvxqewgcjfx" path="res://assets/sprites/character.png" id="2_babvs"]
+[ext_resource type="Material" uid="uid://b03x87sr0n34q" path="res://scenes/prefabs/outline_material.tres" id="2_dmi7x"]
+[ext_resource type="PackedScene" uid="uid://ciutq4m5mikhv" path="res://scenes/prefabs/weapon.tscn" id="4_i0vgb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j83e1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_babvs"]
+
+[node name="ControlledEntity" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "weapon")]
+texture_filter = 3
+script = ExtResource("1_j83e1")
+sprite = NodePath("Sprite2D")
+weapon = NodePath("Weapon")
+metadata/_custom_type_script = "uid://4fy4lf3u0wfb"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_j83e1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("2_dmi7x")
+texture = ExtResource("2_babvs")
+
+[node name="SelectionBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionBox"]
+shape = SubResource("CapsuleShape2D_babvs")
+
+[node name="Weapon" parent="." instance=ExtResource("4_i0vgb")]

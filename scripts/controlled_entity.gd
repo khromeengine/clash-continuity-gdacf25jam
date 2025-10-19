@@ -6,33 +6,42 @@ extends GameStateBoundEntity
 @export var player_override: bool = false
 
 @export_group("Movement")
-@export var move_accel: float = 200
-@export var max_speed: float = 500
-@export var gravity: float = 3000
-@export var friction: float = 0.2
-@export var terminal_velocity: float = 1500
+@export var move_accel: float = 1400
+@export var max_speed: float = 300
 @export var sharp_turn_multiplier: float = 0.2
-@export var air_move_multiplier: float = 0.2
-@export var jump_speed: float = 700
+@export var air_move_multiplier: float = 0.5
+@export var jump_speed: float = 600
 
+@export_group("Dependencies")
+@export var sprite: Sprite2D
+@export var weapon: Weapon
 
 
 var stunned: bool = false
 var moving: bool = false
-var weapon: Variant
 var controller: Variant
+
+var highlight_color: Color = GlobalColor.enemy:
+	set(color):
+		highlight_color = color
+		update_color()
 
 
 func _ready():
+	if player_override == true:
+		GameStateManager.controlled_player = self
+		highlight_ally()
+	else:
+		update_color()
 	super()
 
 
 func tick_frame(delta: float):
 	if not stunned:
 		parse_controller_input(delta)
-	move_and_slide()
-	apply_gravity(delta)
-	apply_friction(delta)
+		if player_override:
+			aim_at_mouse()
+	super(delta)
 
 
 func parse_controller_input(delta: float):
@@ -54,10 +63,9 @@ func parse_controller_input(delta: float):
 				release_weapon(delta)
 
 
-func apply_gravity(delta: float):
-	print(velocity.y)
-	if not is_on_floor():
-		velocity.y = clampf(velocity.y + (gravity * delta), -INF, terminal_velocity)
+func aim_at_mouse():
+	if weapon != null:
+		weapon.aim_at(ControlCentral.get_mouse_position())
 
 
 
@@ -68,22 +76,22 @@ func apply_friction(delta: float):
 
 func move_left(delta: float):
 	if not is_on_floor():
-		velocity.x = clampf(velocity.x - move_accel * air_move_multiplier, -max_speed, INF)
+		velocity.x = clampf(velocity.x - move_accel * air_move_multiplier * delta, -max_speed, INF)
 		return
 	if velocity.x > 0:
 		velocity.x = sharp_turn_multiplier * velocity.x
 	if velocity.x > -max_speed:
-		velocity.x = clampf(velocity.x - move_accel, -max_speed, INF)
+		velocity.x = clampf(velocity.x - move_accel * delta, -max_speed, INF)
 
 
 func move_right(delta: float):
 	if not is_on_floor():
-		velocity.x = clampf(velocity.x + move_accel * air_move_multiplier, -INF, max_speed)
+		velocity.x = clampf(velocity.x + move_accel * air_move_multiplier * delta, -INF, max_speed)
 		return
 	if velocity.x < 0:
 		velocity.x = sharp_turn_multiplier * velocity.x
 	if velocity.x < max_speed:
-		velocity.x = clampf(velocity.x + move_accel, -INF, max_speed)
+		velocity.x = clampf(velocity.x + move_accel * delta, -INF, max_speed)
 
 
 func try_jump():
@@ -100,3 +108,24 @@ func fire_weapon(delta: float):
 func release_weapon(delta: float):
 	return
 	weapon.release()
+
+
+func enable_player_override():
+	pass
+
+
+func disable_player_override():
+	pass
+
+
+func highlight_ally():
+	highlight_color = GlobalColor.ally
+
+
+func highlight_enemy():
+	highlight_color = GlobalColor.enemy
+
+
+func update_color():
+	if sprite:
+		sprite.set_instance_shader_parameter("outline_color", highlight_color)

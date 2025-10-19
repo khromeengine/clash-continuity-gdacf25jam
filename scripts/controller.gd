@@ -1,2 +1,2 @@
 class_name Controller
-extends Node
+extends Node2D

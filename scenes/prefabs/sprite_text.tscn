@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://s4lyntbpxv4d"]
+
+[ext_resource type="Texture2D" uid="uid://c0imx1pj2k4kk" path="res://assets/sprites/eliminate_redundancy.png" id="1_2g7dt"]
+[ext_resource type="Material" uid="uid://b03x87sr0n34q" path="res://scenes/prefabs/outline_material.tres" id="1_ishm4"]
+
+[node name="SpriteText" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("1_ishm4")
+texture = ExtResource("1_2g7dt")

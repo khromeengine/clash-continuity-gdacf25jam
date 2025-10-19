@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cvcjs33uexc3m"]
+
+[ext_resource type="Material" uid="uid://b03x87sr0n34q" path="res://scenes/prefabs/outline_material.tres" id="1_0mxgr"]
+[ext_resource type="Script" uid="uid://37ip6bovmngs" path="res://scripts/selector_arrow.gd" id="1_23e4w"]
+[ext_resource type="Texture2D" uid="uid://covx5h3mg460o" path="res://assets/sprites/selector.png" id="3_0mxgr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fu8dr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_23e4w"]
+size = Vector2(6, 19.25)
+
+[node name="SelectorArrow" type="CharacterBody2D"]
+texture_filter = 3
+material = ExtResource("1_0mxgr")
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_23e4w")
+metadata/_custom_type_script = "uid://37ip6bovmngs"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("1_0mxgr")
+position = Vector2(0, -24)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_0mxgr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_fu8dr")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 8)
+zoom = Vector2(1.5, 1.5)
+
+[node name="SelectorBox" type="Area2D" parent="."]
+position = Vector2(0, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SelectorBox"]
+position = Vector2(0, -14.375)
+shape = SubResource("RectangleShape2D_23e4w")
+debug_color = Color(0.986136, 0, 0.326701, 0.42)

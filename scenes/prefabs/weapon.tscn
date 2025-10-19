@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://ciutq4m5mikhv"]
+
+[ext_resource type="Texture2D" uid="uid://bt88ddgr8dugl" path="res://assets/sprites/laser.png" id="1_0re87"]
+[ext_resource type="Script" uid="uid://bheomr7mg2j6x" path="res://scripts/weapon.gd" id="1_0uwhn"]
+[ext_resource type="Material" uid="uid://8lglrslnld07" path="res://scenes/prefabs/laser_sight.tres" id="2_cs7ep"]
+[ext_resource type="Script" uid="uid://btmtg64ueha77" path="res://scripts/laser_sight_cross.gd" id="4_5tkr8"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_0uwhn")
+
+[node name="LaserSightCross" type="Node2D" parent="." node_paths=PackedStringArray("left_arm", "right_arm")]
+script = ExtResource("4_5tkr8")
+left_arm = NodePath("LeftArm")
+right_arm = NodePath("RightArm")
+
+[node name="LaserSight" type="Sprite2D" parent="LaserSightCross"]
+material = ExtResource("2_cs7ep")
+position = Vector2(67, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("1_0re87")
+
+[node name="LeftArm" type="Node2D" parent="LaserSightCross"]
+rotation = -0.785398
+
+[node name="LaserSight" type="Sprite2D" parent="LaserSightCross/LeftArm"]
+material = ExtResource("2_cs7ep")
+position = Vector2(32, 1.90735e-06)
+scale = Vector2(1, 1)
+texture = ExtResource("1_0re87")
+
+[node name="RightArm" type="Node2D" parent="LaserSightCross"]
+rotation = 0.785398
+
+[node name="LaserSight" type="Sprite2D" parent="LaserSightCross/RightArm"]
+material = ExtResource("2_cs7ep")
+position = Vector2(32, 0)
+scale = Vector2(1, 1)
+texture = ExtResource("1_0re87")

@@ -1,8 +1,10 @@
-extends Controller
+extends Node2D
 
 enum PossibleInputs {
 	M_LEFT,
+	M_UP,
 	M_RIGHT,
+	M_DOWN,
 	JUMP,
 	FIRE,
 	RELEASE_FIRE,
@@ -16,16 +18,20 @@ var _list_inputs: Array[PossibleInputs]
 
 func _physics_process(delta: float) -> void:
 	parse_last_player_inputs()
-	print(_list_inputs)
 
 
 func parse_last_player_inputs():
 	_list_inputs.clear()
 	var leftright = Input.get_action_strength("right") - Input.get_action_strength("left")
+	var updown = Input.get_action_strength("up") - Input.get_action_strength("down")
 	if leftright < 0:
 		_list_inputs.push_back(PossibleInputs.M_LEFT)
 	elif leftright > 0:
 		_list_inputs.push_back(PossibleInputs.M_RIGHT)
+	if updown < 0:
+		_list_inputs.push_back(PossibleInputs.M_UP)
+	elif updown > 0:
+		_list_inputs.push_back(PossibleInputs.M_DOWN)
 	if Input.is_action_pressed("jump"):
 		_list_inputs.push_back(PossibleInputs.JUMP)
 	if Input.is_action_pressed("fire"):
@@ -43,4 +49,7 @@ func parse_system_inputs():
 
 func get_last_player_inputs():
 	return _list_inputs
-	
+
+
+func get_mouse_position():
+	return get_global_mouse_position()
