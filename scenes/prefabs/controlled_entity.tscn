@@ -1,23 +1,129 @@
-[gd_scene load_steps=7 format=3 uid="uid://dqpkvy0maln4m"]
+[gd_scene load_steps=13 format=3 uid="uid://dqpkvy0maln4m"]
 
 [ext_resource type="Script" uid="uid://4fy4lf3u0wfb" path="res://scripts/controlled_entity.gd" id="1_j83e1"]
 [ext_resource type="Texture2D" uid="uid://d2vvxqewgcjfx" path="res://assets/sprites/character.png" id="2_babvs"]
 [ext_resource type="Material" uid="uid://b03x87sr0n34q" path="res://scenes/prefabs/outline_material.tres" id="2_dmi7x"]
 [ext_resource type="PackedScene" uid="uid://ciutq4m5mikhv" path="res://scenes/prefabs/weapon.tscn" id="4_i0vgb"]
+[ext_resource type="Texture2D" uid="uid://bu0c2f2d5m34" path="res://assets/sprites/you.png" id="5_738id"]
+[ext_resource type="PackedScene" uid="uid://c8w5rc1tshu4j" path="res://scenes/prefabs/controller.tscn" id="6_1u1wm"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j83e1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1u1wm"]
+size = Vector2(30, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i0vgb"]
+size = Vector2(26, 26)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_babvs"]
 
-[node name="ControlledEntity" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "weapon")]
+[sub_resource type="Animation" id="Animation_1u1wm"]
+resource_name = "start"
+length = 4.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("YOU:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2, 1.6, 2, 2.7, 2.8),
+"transitions": PackedFloat32Array(0.6, 1.67, 0.6, 1.67, 0.6, 10, 5, 1),
+"update": 0,
+"values": [Vector2(0, -48), Vector2(0, -60), Vector2(0, -48), Vector2(0, -60), Vector2(0, -48), Vector2(0, -60), Vector2(0, -2000), Vector2(0, -50000)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:stunned")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("YOU:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_om4j0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("YOU:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -48)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:stunned")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("YOU:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ww6vn"]
+_data = {
+&"RESET": SubResource("Animation_om4j0"),
+&"start": SubResource("Animation_1u1wm")
+}
+
+[node name="ControlledEntity" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "weapon", "animation_player", "controller")]
 texture_filter = 3
+collision_layer = 16
+collision_mask = 17
 script = ExtResource("1_j83e1")
+move_accel = 800.0
+max_speed = 120.0
 sprite = NodePath("Sprite2D")
 weapon = NodePath("Weapon")
+animation_player = NodePath("AnimationPlayer")
+controller = NodePath("Controller")
 metadata/_custom_type_script = "uid://4fy4lf3u0wfb"
 
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_1u1wm")
+debug_color = Color(0.687571, 0.499502, 0, 0.42)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_j83e1")
+shape = SubResource("RectangleShape2D_i0vgb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("2_dmi7x")
@@ -29,3 +135,15 @@ texture = ExtResource("2_babvs")
 shape = SubResource("CapsuleShape2D_babvs")
 
 [node name="Weapon" parent="." instance=ExtResource("4_i0vgb")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ww6vn")
+}
+
+[node name="YOU" type="Sprite2D" parent="."]
+material = ExtResource("2_dmi7x")
+position = Vector2(0, -48)
+texture = ExtResource("5_738id")
+
+[node name="Controller" parent="." instance=ExtResource("6_1u1wm")]

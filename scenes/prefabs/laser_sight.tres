@@ -6,3 +6,4 @@
 resource_local_to_scene = true
 shader = ExtResource("1_6i2dn")
 shader_parameter/laser_color = Color(1, 0, 0, 1)
+shader_parameter/warbling_speed = 1.0

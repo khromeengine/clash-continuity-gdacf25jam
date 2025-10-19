@@ -10,6 +10,9 @@ signal succeeded_slowed_game
 signal request_normal_game
 signal succeeded_normal_game
 
+signal game_start
+signal player_die
+signal game_restart
 
 enum GameState {
 	PAUSED,
@@ -28,8 +31,16 @@ var slowed_speed: float = 0.1
 var controlled_player: ControlledEntity
 var unpaused_state: GameState
 
+var level: Node2D
+
 var level_camera: Camera2D
-var camera_override: Camera2D
+var camera_override: Camera2D:
+	set(cam):
+		camera_override = cam
+		if cam:
+			level_camera.enabled = false
+		else:
+			level_camera.enabled = true
 
 
 func _ready():

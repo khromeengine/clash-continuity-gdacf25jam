@@ -1,12 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dm4gah0vibsdq"]
+[gd_scene load_steps=10 format=3 uid="uid://dm4gah0vibsdq"]
 
 [ext_resource type="PackedScene" uid="uid://dkl4s4ceqy7nb" path="res://scenes/levels/base_level.tscn" id="1_yautc"]
 [ext_resource type="PackedScene" uid="uid://dqpkvy0maln4m" path="res://scenes/prefabs/controlled_entity.tscn" id="2_fr1um"]
 [ext_resource type="PackedScene" uid="uid://cvcjs33uexc3m" path="res://scenes/prefabs/selector_arrow.tscn" id="3_fr1um"]
+[ext_resource type="Shader" uid="uid://clicxl510mapn" path="res://scripts/shader/outline_item.gdshader" id="4_v45ci"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_v45ci"]
 
-[sub_resource type="Shader" id="Shader_fr1um"]
+[sub_resource type="Shader" id="Shader_v45ci"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -38,8 +39,20 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v45ci"]
 resource_local_to_scene = true
-shader = SubResource("Shader_fr1um")
+shader = SubResource("Shader_v45ci")
 shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_width = 1.5
+shader_parameter/blend = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6xh4u"]
+resource_local_to_scene = true
+shader = ExtResource("4_v45ci")
+shader_parameter/outline_width = 1.5
+shader_parameter/blend = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_48ne7"]
+resource_local_to_scene = true
+shader = ExtResource("4_v45ci")
 shader_parameter/outline_width = 1.5
 shader_parameter/blend = 1.0
 
@@ -57,10 +70,19 @@ player_override = true
 
 [node name="ControlledEntity2" parent="." index="2" instance=ExtResource("2_fr1um")]
 
-[node name="Camera2D" type="Camera2D" parent="." index="3"]
-position_smoothing_enabled = true
-
-[node name="SelectorArrow" parent="." index="4" node_paths=PackedStringArray("selected_body") instance=ExtResource("3_fr1um")]
+[node name="SelectorArrow" parent="." index="3" node_paths=PackedStringArray("selected_body") instance=ExtResource("3_fr1um")]
 material = SubResource("ShaderMaterial_v45ci")
 active = true
 selected_body = NodePath("../ControlledEntity")
+
+[node name="redundancy" parent="Control" index="0"]
+material = SubResource("ShaderMaterial_6xh4u")
+
+[node name="no" parent="Control" index="1"]
+material = SubResource("ShaderMaterial_48ne7")
+
+[node name="good" parent="Control" index="2"]
+material = SubResource("ShaderMaterial_48ne7")
+
+[node name="ControlledEntity3" parent="." index="8" instance=ExtResource("2_fr1um")]
+position = Vector2(-78, 51)

@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvcjs33uexc3m"]
+[gd_scene load_steps=8 format=3 uid="uid://cvcjs33uexc3m"]
 
 [ext_resource type="Material" uid="uid://b03x87sr0n34q" path="res://scenes/prefabs/outline_material.tres" id="1_0mxgr"]
 [ext_resource type="Script" uid="uid://37ip6bovmngs" path="res://scripts/selector_arrow.gd" id="1_23e4w"]
 [ext_resource type="Texture2D" uid="uid://covx5h3mg460o" path="res://assets/sprites/selector.png" id="3_0mxgr"]
+[ext_resource type="AudioStream" uid="uid://btor6j6st1t2h" path="res://assets/idk/select.wav" id="4_fu8dr"]
+[ext_resource type="AudioStream" uid="uid://byof0jf73o2ck" path="res://assets/idk/failselectr.wav" id="5_xrby0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fu8dr"]
 
@@ -29,7 +31,7 @@ shape = SubResource("CircleShape2D_fu8dr")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 8)
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(1.2, 1.2)
 
 [node name="SelectorBox" type="Area2D" parent="."]
 position = Vector2(0, 8)
@@ -38,3 +40,10 @@ position = Vector2(0, 8)
 position = Vector2(0, -14.375)
 shape = SubResource("RectangleShape2D_23e4w")
 debug_color = Color(0.986136, 0, 0.326701, 0.42)
+
+[node name="SelectAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_fu8dr")
+
+[node name="FailSelectAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_xrby0")
+pitch_scale = 0.66

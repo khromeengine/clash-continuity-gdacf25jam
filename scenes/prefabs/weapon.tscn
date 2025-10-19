@@ -1,9 +1,40 @@
-[gd_scene load_steps=8 format=3 uid="uid://ciutq4m5mikhv"]
+[gd_scene load_steps=12 format=3 uid="uid://ciutq4m5mikhv"]
 
 [ext_resource type="Texture2D" uid="uid://bt88ddgr8dugl" path="res://assets/sprites/laser.png" id="1_0re87"]
 [ext_resource type="Script" uid="uid://bheomr7mg2j6x" path="res://scripts/weapon.gd" id="1_0uwhn"]
 [ext_resource type="Material" uid="uid://8lglrslnld07" path="res://scenes/prefabs/laser_sight.tres" id="2_cs7ep"]
 [ext_resource type="Script" uid="uid://btmtg64ueha77" path="res://scripts/laser_sight_cross.gd" id="4_5tkr8"]
+[ext_resource type="Script" uid="uid://6hxgleky1pb8" path="res://scripts/projectile_factory.gd" id="5_7kmfj"]
+[ext_resource type="PackedScene" uid="uid://chyv7rjx4hr5m" path="res://scenes/prefabs/projectile.tscn" id="6_nchfm"]
+[ext_resource type="AudioStream" uid="uid://d4ec636kil86a" path="res://assets/idk/charge.wav" id="7_nchfm"]
+[ext_resource type="AudioStream" uid="uid://bxd5cwjftbdtf" path="res://assets/idk/explosion.wav" id="8_4f55t"]
+
+[sub_resource type="Animation" id="Animation_qr0du"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserSightCross/LeftArm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.785398]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaserSightCross/RightArm:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.785398]
+}
 
 [sub_resource type="Animation" id="Animation_5tkr8"]
 resource_name = "recover"
@@ -33,44 +64,18 @@ tracks/1/keys = {
 "values": [0.0, 1.39626, 0.785398]
 }
 
-[sub_resource type="Animation" id="Animation_qr0du"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LaserSightCross/LeftArm:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [-0.785398]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LaserSightCross/RightArm:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.785398]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7kmfj"]
 _data = {
 &"RESET": SubResource("Animation_qr0du"),
 &"recover": SubResource("Animation_5tkr8")
 }
 
-[node name="Weapon" type="Node2D" node_paths=PackedStringArray("laser_sights", "cdTimer", "animation_player")]
+[node name="Weapon" type="Node2D" node_paths=PackedStringArray("laser_sights", "cdTimer", "animation_player", "projectile_factory")]
 script = ExtResource("1_0uwhn")
 laser_sights = NodePath("LaserSightCross")
 cdTimer = NodePath("CDTimer")
 animation_player = NodePath("AnimationPlayer")
+projectile_factory = NodePath("ProjectileFactory")
 
 [node name="LaserSightCross" type="Node2D" parent="." node_paths=PackedStringArray("left_arm", "right_arm", "center_sight", "left_laser", "right_laser")]
 script = ExtResource("4_5tkr8")
@@ -93,7 +98,6 @@ rotation = -0.785398
 [node name="LaserSight" type="Sprite2D" parent="LaserSightCross/LeftArm"]
 material = ExtResource("2_cs7ep")
 position = Vector2(32, 1.90735e-06)
-scale = Vector2(1, 1)
 texture = ExtResource("1_0re87")
 
 [node name="RightArm" type="Node2D" parent="LaserSightCross"]
@@ -102,7 +106,6 @@ rotation = 0.785398
 [node name="LaserSight" type="Sprite2D" parent="LaserSightCross/RightArm"]
 material = ExtResource("2_cs7ep")
 position = Vector2(32, 0)
-scale = Vector2(1, 1)
 texture = ExtResource("1_0re87")
 
 [node name="CDTimer" type="Timer" parent="."]
@@ -112,3 +115,19 @@ one_shot = true
 libraries = {
 &"": SubResource("AnimationLibrary_7kmfj")
 }
+
+[node name="ProjectileFactory" type="Node2D" parent="."]
+position = Vector2(42, 0)
+script = ExtResource("5_7kmfj")
+projectile_scene = ExtResource("6_nchfm")
+fire_speed = 5000.0
+metadata/_custom_type_script = "uid://6hxgleky1pb8"
+
+[node name="ReadyAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_nchfm")
+volume_db = -9.905
+pitch_scale = 0.53
+
+[node name="FireAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_4f55t")
+volume_db = -11.885

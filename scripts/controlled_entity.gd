@@ -4,6 +4,7 @@ extends GameStateBoundEntity
 
 @export_group("Entity Info")
 @export var player_override: bool = false
+@export var stunned: bool = false
 
 @export_group("Movement")
 @export var move_accel: float = 1400
@@ -15,11 +16,11 @@ extends GameStateBoundEntity
 @export_group("Dependencies")
 @export var sprite: Sprite2D
 @export var weapon: Weapon
+@export var animation_player: AnimationPlayer
+@export var controller: Controller
 
-
-var stunned: bool = false
 var moving: bool = false
-var controller: Variant
+
 
 var highlight_color: Color = GlobalColor.enemy:
 	set(color):
@@ -33,7 +34,12 @@ func _ready():
 		highlight_ally()
 	else:
 		update_color()
+	GameStateManager.game_start.connect(init_game)
 	super()
+
+
+func init_game():
+	animation_player.play("start")
 
 
 func tick_frame(delta: float):
@@ -41,12 +47,14 @@ func tick_frame(delta: float):
 		parse_controller_input(delta)
 		if player_override:
 			aim_at_mouse()
+		else:
+			weapon.lock_on_target(controller.ask_for_target_location())
 	super(delta)
 
 
 func parse_controller_input(delta: float):
 	moving = false
-	var list_inputs = ControlCentral.get_last_player_inputs() if player_override else [] ##
+	var list_inputs = ControlCentral.get_last_player_inputs() if player_override else controller.ask_input(weapon.fire_ready)
 	for input in list_inputs:
 		match(input):
 			ControlCentral.PossibleInputs.M_LEFT:

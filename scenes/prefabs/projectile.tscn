@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://chyv7rjx4hr5m"]
+
+[ext_resource type="Script" uid="uid://dewci3icsy00w" path="res://scripts/projectile.gd" id="1_t7kom"]
+[ext_resource type="Texture2D" uid="uid://dpn2kjtor347g" path="res://assets/sprites/bullet.png" id="2_a5uni"]
+[ext_resource type="Gradient" uid="uid://cqudqndvmoy" path="res://assets/idk/projectile_trail_gradient.tres" id="3_q7p0a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_softn"]
+size = Vector2(2, 2)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_byeak"]
+radius = 4.0
+
+[node name="Projectile" type="CharacterBody2D" node_paths=PackedStringArray("hitbox", "hitray", "trail", "lifetimer", "expiration_timer")]
+collision_layer = 0
+script = ExtResource("1_t7kom")
+hitbox = NodePath("Hitbox")
+hitray = NodePath("RayCast2D")
+bounces = 1
+trail = NodePath("Line2D")
+lifetimer = NodePath("LifeTimer")
+expiration_timer = NodePath("ExpirationTimer")
+gravity = 0.0
+friction = 0.0
+terminal_velocity = 1e+09
+metadata/_custom_type_script = "uid://dewci3icsy00w"
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(8, 0)
+target_position = Vector2(10, 0)
+collision_mask = 4
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(7, 0)
+shape = SubResource("RectangleShape2D_softn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(4, 0)
+texture = ExtResource("2_a5uni")
+
+[node name="Line2D" type="Line2D" parent="."]
+top_level = true
+points = PackedVector2Array(-10, 0, 0, 0)
+width = 1.0
+gradient = ExtResource("3_q7p0a")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(4, 0)
+shape = SubResource("CircleShape2D_byeak")
+debug_color = Color(0.97, 0, 0, 0.419608)
+
+[node name="LifeTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ExpirationTimer" type="Timer" parent="."]
+one_shot = true

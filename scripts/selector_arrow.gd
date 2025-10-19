@@ -47,7 +47,8 @@ func parse_selector_player_input(delta: float):
 				else:
 					shift_to_target(selected_body)
 			ControlCentral.PossibleInputs.FIRE:
-				shift_to_target(selected_body)
+				if active:
+					shift_to_target(selected_body)
 	if active:
 		move_dir(dir)
 
@@ -66,22 +67,33 @@ func enable_shift():
 
 
 func shift_from_target(body: ControlledEntity):
+	if body.stunned:
+		$FailSelectAudio.play()
+		return
 	selected_body_queue.clear()
 	if selected_body != null:
 		global_position = body.global_position
 		body.player_override = false
 	GameStateManager.request_slowed_game.emit()
+	camera.enabled = true
+	GameStateManager.camera_override = camera
 	active = true
+	$SelectAudio.play()
 	update_selected_body()
 
 
 func shift_to_target(body: ControlledEntity):
 	if selected_body == null:
+		if not $FailSelectAudio.playing:
+			$FailSelectAudio.play()
 		return
 	body.player_override = true
 	GameStateManager.request_normal_game.emit()
+	camera.enabled = false
+	GameStateManager.camera_override = null
 	velocity = Vector2.ZERO
 	active = false
+	$SelectAudio.play()
 
 
 func on_selector_box_enter(body: Area2D):

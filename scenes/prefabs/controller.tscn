@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8w5rc1tshu4j"]
+
+[ext_resource type="Script" uid="uid://cybj5jq0tgm6v" path="res://scripts/controller.gd" id="1_xso1b"]
+
+[node name="Controller" type="Node2D" node_paths=PackedStringArray("los_raycast", "scan_zone", "lost_timer")]
+script = ExtResource("1_xso1b")
+los_raycast = NodePath("RayCast2D")
+scan_zone = NodePath("ScanZone")
+lost_timer = NodePath("LostTimer")
+metadata/_custom_type_script = "uid://cybj5jq0tgm6v"
+
+[node name="ScanZone" type="Area2D" parent="."]
+visible = false
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="ScanZone"]
+polygon = PackedVector2Array(0, 0, 260, 150, 260, -150)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(200, 0)
+collision_mask = 5
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="LostTimer" type="Timer" parent="."]
